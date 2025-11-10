@@ -21,8 +21,8 @@ stages:
       size: 638157
     - path: params.yaml
       hash: md5
-      md5: 4954c1f153018cdb7e108c2d0ad5c614
-      size: 295
+      md5: 7f781153a8b1f8a3d0f6f78289aaeff9
+      size: 521
     - path: src/prepare.py
       hash: md5
       md5: 4fac557e0d5b81206635e7d37caca6dd
@@ -48,3 +48,47 @@ stages:
       hash: md5
       md5: 1a3d02edac86f5eb75be102cf51b7b15
       size: 73449
+  train:
+    cmd: python -m src.train --params params.yaml
+    deps:
+    - path: data/processed/X_test.csv
+      hash: md5
+      md5: b5b152497becd695137c627e6ff4f109
+      size: 158673
+    - path: data/processed/X_train.csv
+      hash: md5
+      md5: bd99acf39e99c24a74f99d0b62cad5be
+      size: 634119
+    - path: data/processed/y_test.csv
+      hash: md5
+      md5: 1056fdb24d2c7d46b23482bae7ed2f69
+      size: 18401
+    - path: data/processed/y_train.csv
+      hash: md5
+      md5: 1a3d02edac86f5eb75be102cf51b7b15
+      size: 73449
+    - path: params.yaml
+      hash: md5
+      md5: 7f781153a8b1f8a3d0f6f78289aaeff9
+      size: 521
+    - path: src/train.py
+      hash: md5
+      md5: 92b5fdbc415aa684571add1fa18a6915
+      size: 6953
+    outs:
+    - path: models/feature_names.json
+      hash: md5
+      md5: 25798c26f3ab70f184f31db920f5057a
+      size: 205
+    - path: models/model.joblib
+      hash: md5
+      md5: a725a372ac708b580af223736454a13f
+      size: 24283217
+    - path: reports/feature_importance.csv
+      hash: md5
+      md5: 8584cbd6116c47390f982b612f619634
+      size: 371
+    - path: reports/metrics.json
+      hash: md5
+      md5: b1c11c0398bffc41184ff01b945fa7fb
+      size: 190

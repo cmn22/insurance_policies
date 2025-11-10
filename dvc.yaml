@@ -18,3 +18,18 @@ stages:
       - data/processed/y_train.csv
       - data/processed/y_test.csv
       - data/processed/schema.json
+
+  train:
+    cmd: python -m src.train --params params.yaml
+    deps:
+      - src/train.py
+      - params.yaml
+      - data/processed/X_train.csv
+      - data/processed/X_test.csv
+      - data/processed/y_train.csv
+      - data/processed/y_test.csv
+    outs:
+      - models/model.joblib
+      - models/feature_names.json
+      - reports/metrics.json
+      - reports/feature_importance.csv
