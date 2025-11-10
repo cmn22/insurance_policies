@@ -5,3 +5,16 @@ stages:
       - src/fetch_data.py
     outs:
       - data/raw/insurance_dataset.csv
+
+  prepare:
+    cmd: python -m src.prepare --params params.yaml
+    deps:
+      - src/prepare.py
+      - params.yaml
+      - data/raw/insurance_dataset.csv
+    outs:
+      - data/processed/X_train.csv
+      - data/processed/X_test.csv
+      - data/processed/y_train.csv
+      - data/processed/y_test.csv
+      - data/processed/schema.json

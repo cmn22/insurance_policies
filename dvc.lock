@@ -12,3 +12,39 @@ stages:
       hash: md5
       md5: 8883030773f85f4adcce5f71d7174eb0
       size: 638157
+  prepare:
+    cmd: python -m src.prepare --params params.yaml
+    deps:
+    - path: data/raw/insurance_dataset.csv
+      hash: md5
+      md5: 8883030773f85f4adcce5f71d7174eb0
+      size: 638157
+    - path: params.yaml
+      hash: md5
+      md5: 4954c1f153018cdb7e108c2d0ad5c614
+      size: 295
+    - path: src/prepare.py
+      hash: md5
+      md5: 4fac557e0d5b81206635e7d37caca6dd
+      size: 2911
+    outs:
+    - path: data/processed/X_test.csv
+      hash: md5
+      md5: b5b152497becd695137c627e6ff4f109
+      size: 158673
+    - path: data/processed/X_train.csv
+      hash: md5
+      md5: bd99acf39e99c24a74f99d0b62cad5be
+      size: 634119
+    - path: data/processed/schema.json
+      hash: md5
+      md5: 085c3ae138217ad7b899b4a0adea39ab
+      size: 442
+    - path: data/processed/y_test.csv
+      hash: md5
+      md5: 1056fdb24d2c7d46b23482bae7ed2f69
+      size: 18401
+    - path: data/processed/y_train.csv
+      hash: md5
+      md5: 1a3d02edac86f5eb75be102cf51b7b15
+      size: 73449
