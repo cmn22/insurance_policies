@@ -4,3 +4,7 @@ __pycache__
 data/raw/
 data/raw/*
 data/processed/*
+mlruns/
+models/
+reports/feature_importance.csv
+reports/
