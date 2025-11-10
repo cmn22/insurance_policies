@@ -1,0 +1,14 @@
+schema: '2.0'
+stages:
+  fetch_raw:
+    cmd: python -m src.fetch_data
+    deps:
+    - path: src/fetch_data.py
+      hash: md5
+      md5: 965a0a2583c7004a30f2b4b3f18c4436
+      size: 681
+    outs:
+    - path: data/raw/insurance_dataset.csv
+      hash: md5
+      md5: 8883030773f85f4adcce5f71d7174eb0
+      size: 638157
