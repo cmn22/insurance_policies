@@ -1,0 +1,7 @@
+stages:
+  fetch_raw:
+    cmd: python -m src.fetch_data
+    deps:
+      - src/fetch_data.py
+    outs:
+      - data/raw/insurance_dataset.csv
