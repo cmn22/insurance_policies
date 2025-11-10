@@ -1,0 +1,26 @@
+# Core
+pandas==2.2.3
+numpy==1.26.4
+pyarrow==17.0.0
+
+# ML
+scikit-learn==1.5.2
+xgboost==2.1.2
+
+# Validation
+pydantic==2.9.2
+
+# Experiment Tracking
+mlflow==2.16.2
+
+# Data & Model Versioning (with S3 support)
+dvc[s3]==3.51.2
+
+# API Serving
+fastapi==0.115.6
+uvicorn==0.30.6
+
+# Utilities
+python-dotenv==1.0.1
+boto3==1.35.54
+requests==2.32.3
