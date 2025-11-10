@@ -3,3 +3,10 @@ data:
   target: Claim_Amount                      # name of the target column
   test_size: 0.2                            # test split fraction (20%)
   random_state: 42                          # deterministic shuffling
+
+
+model:
+  n_estimators: 200        # number of trees
+  max_depth: 12            # tree depth cap (use null to let it grow)
+  n_jobs: -1               # parallelism (use all cores)
+  random_state: 42         # reproducibility
