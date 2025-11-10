@@ -2,3 +2,5 @@
 .dvc/config.local
 __pycache__
 data/raw/
+data/raw/*
+data/processed/*
