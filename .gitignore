@@ -1,2 +1,4 @@
 .env
 .dvc/config.local
+__pycache__
+data/raw/
