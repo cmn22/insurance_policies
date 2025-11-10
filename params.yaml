@@ -1,0 +1,5 @@
+data:
+  raw_csv: data/raw/insurance_dataset.csv   # path your fetch_data produced
+  target: Claim_Amount                      # name of the target column
+  test_size: 0.2                            # test split fraction (20%)
+  random_state: 42                          # deterministic shuffling
