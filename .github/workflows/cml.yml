@@ -37,17 +37,8 @@ jobs:
           python-version: "3.11"
           cache: pip
 
-      - name: Install dependencies (no requirements.txt)
-        run: |
-          python -m pip install --upgrade pip
-          pip install \
-            pandas \
-            scikit-learn \
-            joblib \
-            pyyaml \
-            python-dotenv \
-            dvc[s3] \
-            cml
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
 
       # If your DVC remote is S3, this pulls the current cache/artifacts needed for the run
       - name: DVC pull (fetch data/artifacts from remote)
@@ -66,6 +57,7 @@ jobs:
           dvc push
 
       # Build a small markdown report from reports/metrics.json for the PR comment
+      - uses: iterative/setup-cml@v1
       - name: Generate CML report
         run: |
           python - <<'PY'
