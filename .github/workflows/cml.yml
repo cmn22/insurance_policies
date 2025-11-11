@@ -14,15 +14,10 @@ jobs:
   run:
     runs-on: ubuntu-latest
     env:
-      # ---- Turn off MLflow in CI (you decided to keep MLflow local) ----
       USE_MLFLOW: "0"
-
-      # ---- DVC Configurations ----
       DATA_SOURCE: s3
       DATA_BUCKET: ${{ vars.DATA_BUCKET }}
       DATA_KEY: ${{ vars.DATA_KEY }}
-
-      # ---- AWS creds for DVC S3 remote (read/push) ----
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
@@ -40,47 +35,59 @@ jobs:
       - name: Install dependencies
         run: python -m pip install -r requirements.txt
 
-      # If your DVC remote is S3, this pulls the current cache/artifacts needed for the run
       - name: DVC pull (fetch data/artifacts from remote)
-        run: |
-          dvc pull --verbose || true
+        run: dvc pull --verbose || true
 
-      # Reproduce the whole pipeline (fetch_raw -> prepare -> train -> evaluate)
       - name: Run DVC pipeline
-        run: |
-          dvc repro
+        run: dvc repro
 
-      # Optional: push any updated DVC-tracked outputs (e.g., new model) to S3 remote
       - name: DVC push (upload new artifacts)
         if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
-        run: |
-          dvc push
+        run: dvc push
 
-      # Build a small markdown report from reports/metrics.json for the PR comment
-      - uses: iterative/setup-cml@v1
       - name: Generate CML report
         run: |
           python - <<'PY'
           import json, pathlib
           p = pathlib.Path("reports/metrics.json")
           if not p.exists():
-              # create a minimal placeholder so the workflow doesn't fail
               open("report.md", "w").write("**No metrics found** (reports/metrics.json missing).")
           else:
               m = json.loads(p.read_text())
-              # Expecting keys you already produce in train/evaluate
-              lines = []
-              lines.append("# Model Metrics")
-              lines.append("")
-              lines.append("| Metric      | Value |")
-              lines.append("|-------------|-------|")
+              lines = ["# Model Metrics", "", "| Metric | Value |", "|---|---|"]
               for k in ["rmse","rmse_test","r2","r2_test","mse","mse_test"]:
                   if k in m:
-                      lines.append(f"| {k} | {m[k]:,.4f} |")
-              lines.append("")
+                      try:
+                          v = f"{float(m[k]):,.4f}"
+                      except Exception:
+                          v = str(m[k])
+                      lines.append(f"| {k} | {v} |")
               open("report.md", "w").write("\n".join(lines))
           PY
+          echo "----- report.md -----"
+          cat report.md
 
-      - name: Post CML report as PR comment
+      - name: Upload report.md as artifact (for debugging)
+        uses: actions/upload-artifact@v4
+        with:
+          name: cml-report
+          path: report.md
+
+      # Install CML CLI
+      - uses: iterative/setup-cml@v2
+
+      # Comment on PRs
+      - name: Post CML report on PR
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cml comment create --pr --file report.md
+          cml comment create --pr report.md
+
+      # Comment on commits for direct pushes to main
+      - name: Post CML report on commit
+        if: ${{ github.event_name == 'push' }}
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml comment create --target=commit report.md
