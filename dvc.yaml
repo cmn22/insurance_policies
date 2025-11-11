@@ -25,11 +25,19 @@ stages:
       - src/train.py
       - params.yaml
       - data/processed/X_train.csv
-      - data/processed/X_test.csv
       - data/processed/y_train.csv
-      - data/processed/y_test.csv
     outs:
       - models/model.joblib
       - models/feature_names.json
+
+  evaluate:
+    cmd: python -m src.evaluate --params params.yaml
+    deps:
+      - src/evaluate.py
+      - params.yaml
+      - models/model.joblib
+      - data/processed/X_test.csv
+      - data/processed/y_test.csv
+    outs:
       - reports/metrics.json
       - reports/feature_importance.csv
