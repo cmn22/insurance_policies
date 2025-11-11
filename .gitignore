@@ -5,6 +5,7 @@ data/raw/
 data/raw/*
 data/processed/*
 mlruns/
+mlflow.db
 models/
 reports/feature_importance.csv
 reports/
