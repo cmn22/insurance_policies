@@ -6,7 +6,7 @@ data:
 
 
 model:
-  n_estimators: 200        # number of trees
+  n_estimators: 400        # number of trees
   max_depth: 12            # tree depth cap (use null to let it grow)
   n_jobs: -1               # parallelism (use all cores)
   random_state: 42         # reproducibility
